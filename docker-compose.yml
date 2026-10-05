@@ -1,0 +1,23 @@
+services:
+  awg:
+    image: ${AWG_IMAGE:-ekalkutin/tunnel:latest}
+    container_name: awg
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${AWG_PORT:?set AWG_PORT in .env}:${AWG_PORT}/udp"
+    volumes:
+      # The whole server: keys, params, peers, client configs. Back it up.
+      - ./data:/data
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+        max-file: "3"
