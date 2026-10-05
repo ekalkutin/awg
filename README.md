@@ -19,9 +19,10 @@ data/                СЕКРЕТ, создаётся при первом зап
 ## 0. Собрать и запушить образ (на своей машине)
 
 ```bash
-docker build -t ekalkutin/tunnel:latest .
-docker push ekalkutin/tunnel:latest
+docker compose build && docker compose push     # имя образа: AWG_IMAGE в .env (или ekalkutin/tunnel:latest)
 ```
+
+`.env` для сборки не нужен.
 
 Сервер на ARM? Тогда `docker buildx build --platform linux/amd64,linux/arm64 -t ekalkutin/tunnel:latest --push .`
 

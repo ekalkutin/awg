@@ -1,11 +1,15 @@
 services:
   awg:
     image: ${AWG_IMAGE:-ekalkutin/tunnel:latest}
+    # Only used by "docker compose build" on your machine; the server just pulls the image.
+    build: .
     container_name: awg
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false # not needed for build; at runtime the container refuses to start without AWG_PORT
     ports:
-      - "${AWG_PORT:?set AWG_PORT in .env}:${AWG_PORT}/udp"
+      - "${AWG_PORT:-47123}:${AWG_PORT:-47123}/udp"
     volumes:
       # The whole server: keys, params, peers, client configs. Back it up.
       - ./data:/data
